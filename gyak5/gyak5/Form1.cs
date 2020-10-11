@@ -25,6 +25,46 @@ namespace gyak5
             dataGridView1.DataSource = Ticks;
 
             CreatePortfolio();
+
+            //a. Portfóliónk elemszáma:
+            int elemszám = Portfolio1.Count();
+            //A Count() bálrmilyen megszámlálható listára alkalmazható.
+
+            //b. A portfólióban szereplő részvények darabszáma: 
+            decimal részvényekSzáma = (from x in Portfolio select x.Volume).Sum();
+            MessageBox.Show(string.Format("Részvények száma: {0}", részvényekSzáma));
+            //Először egy listába kigyűjtjük csak a darabszámokat, majd az egész bezárójlezett listát summázzuk. 
+            //(A zárójelben lévő LINQ egy int-ekből álló listát ad, mert a Count tulajdonság int típusú.)
+            //Működik a Min(), Max(), Average(), stb. is.
+
+            //c. A legrégebbi kereskedési nap:
+            DateTime minDátum = (from x in Ticks select x.TradingDay).Min();
+
+            //d. A legutolsó kereskedési nap:
+            DateTime maxDátum = (from x in Ticks select x.TradingDay).Max();
+
+            //e. A két dátum közt eltelt idő napokban -- két DateTime típusú objektum különbsége TimeSpan típusú eredményt ad.
+            //A TimeSpan Day tulajdonsága megadja az időtartam napjainak számát. (Nem kell vacakolni a szökőévekkel stb.)
+            int elteltNapokSzáma = (maxDátum - minDátum).Days;
+
+            //f. Az OTP legrégebbi kereskedési napja: 
+            DateTime optMinDátum = (from x in Ticks where x.Index == "OTP" select x.TradingDay).Min();
+
+            //g. Össze is lehet kapcsolni dolgokat, ez már bonyolultabb:
+            var kapcsolt =
+                from
+                    x in Ticks
+                join
+y in Portfolio
+    on x.Index equals y.Index
+                select new
+                {
+                    Index = x.Index,
+                    Date = x.TradingDay,
+                    Value = x.Price,
+                    Volume = y.Volume
+                };
+            dataGridView1.DataSource = kapcsolt.ToList();
         }
         private void CreatePortfolio()
         {
