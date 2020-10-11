@@ -31,7 +31,7 @@ namespace gyak5
             //A Count() bálrmilyen megszámlálható listára alkalmazható.
 
             //b. A portfólióban szereplő részvények darabszáma: 
-            decimal részvényekSzáma = (from x in Portfolio select x.Volume).Sum();
+            decimal részvényekSzáma = (from x in Portfolio1 select x.Volume).Sum();
             MessageBox.Show(string.Format("Részvények száma: {0}", részvényekSzáma));
             //Először egy listába kigyűjtjük csak a darabszámokat, majd az egész bezárójlezett listát summázzuk. 
             //(A zárójelben lévő LINQ egy int-ekből álló listát ad, mert a Count tulajdonság int típusú.)
@@ -55,7 +55,7 @@ namespace gyak5
                 from
                     x in Ticks
                 join
-y in Portfolio
+y in Portfolio1
     on x.Index equals y.Index
                 select new
                 {
@@ -73,6 +73,20 @@ y in Portfolio
             Portfolio1.Add(new PortfolioItem() { Index = "ELMU", Volume = 10 });
 
             dataGridView2.DataSource = Portfolio1;
+        }
+        private decimal GetPortfolioValue(DateTime date)
+        {
+            decimal value = 0;
+            foreach (var item in Portfolio1)
+            {
+                var last = (from x in Ticks
+                            where item.Index == x.Index.Trim()
+                               && date <= x.TradingDay
+                            select x)
+                            .First();
+                value += (decimal)last.Price * item.Volume;
+            }
+            return value;
         }
     }
 }
