@@ -1,4 +1,5 @@
-﻿using gyak6.MnbServiceReference;
+﻿using gyak6.Entities;
+using gyak6.MnbServiceReference;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,10 +14,13 @@ namespace gyak6
 {
     public partial class Form1 : Form
     {
-
+         
         public Form1()
         {
-            
+             
+            BindingList<RateData> Rate = new BindingList<RateData>();
+            dataGridView1.DataSource = Rate;
+
             InitializeComponent();
             // A változó deklarációk jobb oldalán a "var" egy dinamikus változó típus.
             // A "var" változó az első értékadás pillanatában a kapott érték típusát veszi fel, és később nem változtatható.
