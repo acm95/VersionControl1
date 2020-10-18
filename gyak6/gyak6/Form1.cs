@@ -19,10 +19,13 @@ namespace gyak6
         public Form1()
         {
              
+            BindingList<string> Currencies = new BindingList<string>();
             BindingList<RateData> Rates = new BindingList<RateData>();
             dataGridView1.DataSource = Rates;
-            RefreshData();
+            comboBox1.DataSource = Currencies;
+            
             InitializeComponent();
+
             // A változó deklarációk jobb oldalán a "var" egy dinamikus változó típus.
             // A "var" változó az első értékadás pillanatában a kapott érték típusát veszi fel, és később nem változtatható.
             // Jelen példa első sora tehát ekvivalens azzal, ha a "var" helyélre a MNBArfolyamServiceSoapClient-t írjuk.
@@ -86,6 +89,9 @@ namespace gyak6
             chartArea.AxisY.MajorGrid.Enabled = false;
             chartArea.AxisY.IsStartedFromZero = false;
 
+           
+
+            RefreshData();
         }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
