@@ -8,7 +8,7 @@ namespace gyak7.Entities
 {
     public class DeathProbability
     {
-        public int Sex { get; set; }
+        public int Gender { get; set; }
         public int DAge { get; set; }
         public double DPossibility { get; set; }
     }
