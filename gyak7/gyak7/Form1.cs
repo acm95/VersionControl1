@@ -123,6 +123,7 @@ namespace gyak7
                     Population.Add(újszülött);
                 }
             }
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -144,6 +145,17 @@ namespace gyak7
                                     select x).Count();
                 Console.WriteLine(
                     string.Format("Év:{0} Fiúk:{1} Lányok:{2}", year, nbrOfMales, nbrOfFemales));
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            using (StreamWriter sw = new StreamWriter(@"C:\Windows\Temp\szimulacio.txt", append: true))
+            {
+                sw.WriteLine(string.Format("Szimulációs év:{0}", year));
+                sw.WriteLine(string.Format("Fiuk:{0}", nbrOfMales));
+                sw.WriteLine(string.Format("Lányok:{0}", nbrOfFemales));
+                sw.WriteLine();
             }
         }
     }
