@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using UnitTestExample.Controllers;
-
+using Moq;
+using UnitTestExample.Abstractions;
+using UnitTestExample.Entities;
 
 namespace UnitTestExample.Test
 {
@@ -69,7 +71,7 @@ namespace UnitTestExample.Test
             // Act
             try
             {
-                var actualResult = accountController.Register(email, password);
+                var actualResault = accountController.Register(email, password);
                 NUnit.Framework.Assert.Fail();
             }
             catch (Exception ex)
@@ -78,6 +80,21 @@ namespace UnitTestExample.Test
             }
 
             // Assert
+            var accountServiceMock = new Mock<IAccountManager>(MockBehavior.Strict);
+            accountServiceMock
+                .Setup(m => m.CreateAccount(It.IsAny<Account>()))
+                .Returns<Account>(a => a);
+            var accountController = new AccountController();
+            accountController.AccountManager = accountServiceMock.Object;
+
+            // Act
+            var actualResult = accountController.Register(email, password);
+
+            // Assert
+            NUnit.Framework.Assert.AreEqual(email, actualResult.Email);
+            NUnit.Framework.Assert.AreEqual(password, actualResult.Password);
+            NUnit.Framework.Assert.AreNotEqual(Guid.Empty, actualResult.ID);
+            accountServiceMock.Verify(m => m.CreateAccount(actualResult), Times.Once);
         }
 
     }
