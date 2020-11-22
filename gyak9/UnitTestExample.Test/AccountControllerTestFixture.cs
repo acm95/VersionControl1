@@ -47,6 +47,19 @@ namespace UnitTestExample.Test
             // Assert
             NUnit.Framework.Assert.AreEqual(expectedResult, actualResult);
         }
+        public void TestRegisterHappyPath(string email, string password)
+        {
+            // Arrange
+            var accountController = new AccountController();
+
+            // Act
+            var actualResult = accountController.Register(email, password);
+
+            // Assert
+            NUnit.Framework.Assert.AreEqual(email, actualResult.Email);
+            NUnit.Framework.Assert.AreEqual(password, actualResult.Password);
+            NUnit.Framework.Assert.AreNotEqual(Guid.Empty, actualResult.ID);
+        }
 
     }
 }
