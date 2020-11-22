@@ -14,15 +14,13 @@ namespace UnitTestExample.Test
     {
 
         [Test,
-            TestCase("abcd1234", false),
-    TestCase("irf@uni-corvinus", false),
-    TestCase("irf.uni-corvinus.hu", false),
-    TestCase("irf@uni-corvinus.hu", true),
-            TestCase("abcdefgh", false),
-            TestCase("ABCD1234", false),
-            TestCase("abcdefgh", false),
-            TestCase("abcd", false),
-            TestCase("AbCd1234", true)
+            
+    TestCase("irf@uni-corvinus", "Abcd1234"),
+    TestCase("irf.uni-corvinus.hu", "Abcd1234"),
+    TestCase("irf@uni-corvinus.hu", "abcd1234"),
+    TestCase("irf@uni-corvinus.hu", "ABCD1234"),
+    TestCase("irf@uni-corvinus.hu", "abcdABCD"),
+    TestCase("irf@uni-corvinus.hu", "Ab1234"),
             ]
         public void TestValidateEmail(string email, bool expectedResult)
         {
@@ -36,6 +34,7 @@ namespace UnitTestExample.Test
             NUnit.Framework.Assert.AreEqual(expectedResult, actualResult);
 
         }
+
         public void TestValidatePassword(string password, bool expectedResult)
         {
             // Arrange
@@ -47,6 +46,7 @@ namespace UnitTestExample.Test
             // Assert
             NUnit.Framework.Assert.AreEqual(expectedResult, actualResult);
         }
+
         public void TestRegisterHappyPath(string email, string password)
         {
             // Arrange
@@ -59,6 +59,25 @@ namespace UnitTestExample.Test
             NUnit.Framework.Assert.AreEqual(email, actualResult.Email);
             NUnit.Framework.Assert.AreEqual(password, actualResult.Password);
             NUnit.Framework.Assert.AreNotEqual(Guid.Empty, actualResult.ID);
+        }
+
+        public void TestRegisterValidateException(string email, string password)
+        {
+            // Arrange
+            var accountController = new AccountController();
+
+            // Act
+            try
+            {
+                var actualResult = accountController.Register(email, password);
+                NUnit.Framework.Assert.Fail();
+            }
+            catch (Exception ex)
+            {
+                NUnit.Framework.Assert.IsInstanceOf<ValidationException>(ex);
+            }
+
+            // Assert
         }
 
     }
