@@ -14,18 +14,19 @@ namespace UnitTestExample.Test
     {
 
         [Test,
-            TestCase("abcd1234", false),
-            TestCase("irf@uni-corvinus", false),
-            TestCase("irf.uni-corvinus.hu", false),
-            TestCase("irf@uni-corvinus.hu", true)
+            TestCase("abcdefgh", false),
+            TestCase("ABCD1234", false),
+            TestCase("abcdefgh", false),
+            TestCase("abcd", false),
+            TestCase("AbCd1234", true)
             ]
-        public void TestValidateEmail(string email, bool expectedResult)
+        public void TestValidateEmail(string password, bool expectedResult)
         {
             // Arrange
             var accountController = new AccountController();
 
             // Act
-            var actualResult = accountController.ValidateEmail(email);
+            var actualResult = accountController.ValidateEmail(password);
 
             // Assert
             NUnit.Framework.Assert.AreEqual(expectedResult, actualResult);
