@@ -97,5 +97,29 @@ namespace UnitTestExample.Test
             accountServiceMock.Verify(m => m.CreateAccount(actualResult), Times.Once);
         }
 
+        public void TestRegisterApplicationException(string newEmail, string newPassword)
+        {
+            // Arrange
+            var accountServiceMock = new Mock<IAccountManager>(MockBehavior.Strict);
+            accountServiceMock
+                .Setup(m => m.CreateAccount(It.IsAny<Account>()))
+                .Throws<ApplicationException>();
+            var accountController = new AccountController();
+            accountController.AccountManager = accountServiceMock.Object;
+
+            // Act
+            try
+            {
+                var actualResult = accountController.Register(newEmail, newPassword);
+                NUnit.Framework.Assert.Fail();
+            }
+            catch (Exception ex)
+            {
+                NUnit.Framework.Assert.IsInstanceOf<ApplicationException>(ex);
+            }
+
+            // Assert
+        }
+
     }
 }
