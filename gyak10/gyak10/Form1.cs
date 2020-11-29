@@ -15,6 +15,10 @@ namespace gyak10
     {
         GameController gc = new GameController();
         GameArea ga;
+        int populationSize = 100;
+        int nbrOfSteps = 10;
+        int nbrOfStepsIncrement = 10;
+        int generation = 1;
         public Form1()
         {
 
@@ -26,6 +30,8 @@ namespace gyak10
 
             gc.AddPlayer();
             gc.Start(true);
+
+
 
         }
     }
